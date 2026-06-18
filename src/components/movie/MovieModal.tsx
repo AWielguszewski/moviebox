@@ -93,7 +93,7 @@ export function MovieModal({
   }, [close]);
 
   return (
-    <div className="fixed inset-0 z-[60] flex items-end justify-center sm:items-center">
+    <div className="fixed inset-0 z-[60] flex items-end justify-center pt-3 sm:items-center sm:pt-0">
       <div
         className="absolute inset-0 bg-black/70 backdrop-blur-sm"
         onClick={close}
@@ -108,27 +108,27 @@ export function MovieModal({
           transform: dragY > 0 ? `translateY(${dragY}px)` : undefined,
           transition: dragging ? "none" : "transform 0.25s ease",
         }}
-        className="relative max-h-[90vh] w-full overflow-y-auto rounded-t-2xl border border-border bg-background p-5 shadow-2xl sm:max-h-[85vh] sm:max-w-3xl sm:rounded-2xl sm:p-6"
+        className="relative flex max-h-[min(88dvh,calc(100dvh-env(safe-area-inset-top,0px)-0.75rem))] w-full flex-col overflow-hidden rounded-t-2xl border border-border bg-background shadow-2xl sm:max-h-[85vh] sm:max-w-3xl sm:rounded-2xl"
       >
         <div
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
-          className="-mt-1 mb-2 flex touch-none justify-center py-2 sm:hidden"
+          className="flex min-h-11 shrink-0 touch-none flex-col items-center justify-center px-4 pb-2 pt-[max(0.875rem,env(safe-area-inset-top,0px))] sm:hidden"
           aria-hidden
         >
-          <span className="h-1.5 w-10 rounded-full bg-muted/50" />
+          <span className="h-1.5 w-12 rounded-full bg-muted/70" />
         </div>
         <button
           ref={closeButtonRef}
           type="button"
           onClick={close}
           aria-label="Close"
-          className="absolute right-3 top-3 z-10 rounded-full bg-surface/80 p-2 text-muted backdrop-blur transition-colors hover:bg-surface hover:text-foreground"
+          className="absolute right-3 top-[max(3.25rem,calc(env(safe-area-inset-top,0px)+2.75rem))] z-10 rounded-full bg-surface/80 p-2 text-muted backdrop-blur transition-colors hover:bg-surface hover:text-foreground sm:top-3"
         >
           <CloseIcon className="h-5 w-5" />
         </button>
-        {children}
+        <div className="min-h-0 flex-1 overflow-y-auto p-5 sm:p-6">{children}</div>
       </div>
     </div>
   );
