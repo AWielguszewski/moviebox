@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 
 import { PosterImage } from "@/components/movie/PosterImage";
+import { useFavoritesStore, useHasHydrated } from "@/features/favorites/store";
 import type { MovieSummary } from "@/lib/omdb/types";
 import { cn } from "@/lib/utils";
 
@@ -41,7 +42,18 @@ function buildColumns(items: MovieSummary[]): MovieSummary[][] {
 }
 
 export function PosterMosaic({ items }: { items: MovieSummary[] }) {
-  const columns = useMemo(() => buildColumns(items), [items]);
+  const hydrated = useHasHydrated();
+  const favorites = useFavoritesStore((state) => state.items);
+
+  // After hydration, surface the user's favorites first and fill the rest
+  // with the curated list, so the home page feels personalized.
+  const mosaicItems = useMemo(() => {
+    if (!hydrated || favorites.length === 0) return items;
+    const favoriteIds = new Set(favorites.map((item) => item.id));
+    return [...favorites, ...items.filter((item) => !favoriteIds.has(item.id))];
+  }, [hydrated, favorites, items]);
+
+  const columns = useMemo(() => buildColumns(mosaicItems), [mosaicItems]);
 
   return (
     <div
