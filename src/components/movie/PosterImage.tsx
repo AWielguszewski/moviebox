@@ -12,6 +12,7 @@ interface PosterImageProps {
   sizes?: string;
   priority?: boolean;
   decorative?: boolean;
+  quality?: number;
   className?: string;
 }
 
@@ -21,6 +22,7 @@ export function PosterImage({
   sizes = "(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 200px",
   priority = false,
   decorative = false,
+  quality,
   className,
 }: PosterImageProps) {
   const [failed, setFailed] = useState(false);
@@ -40,6 +42,7 @@ export function PosterImage({
           aria-hidden={decorative || undefined}
           fill
           sizes={sizes}
+          quality={quality}
           className="object-cover"
           priority={priority}
           onError={() => setFailed(true)}

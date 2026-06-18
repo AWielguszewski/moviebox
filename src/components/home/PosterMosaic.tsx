@@ -83,6 +83,7 @@ export function PosterMosaic({ items }: { items: MovieSummary[] }) {
                     poster={item.poster}
                     title={item.title}
                     decorative
+                    quality={35}
                     sizes="(max-width: 768px) 33vw, 16vw"
                     className="rounded-lg opacity-70"
                   />
