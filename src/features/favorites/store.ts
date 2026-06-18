@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 
@@ -35,11 +35,15 @@ export const useFavoritesStore = create<FavoritesState>()(
   ),
 );
 
-// Guards against SSR/CSR hydration mismatch for persisted state.
+// Guards against SSR/CSR hydration mismatch for persisted state:
+// false during SSR and first paint, true once mounted on the client.
+const noop = () => () => {};
 export function useHasHydrated(): boolean {
-  const [hydrated, setHydrated] = useState(false);
-  useEffect(() => setHydrated(true), []);
-  return hydrated;
+  return useSyncExternalStore(
+    noop,
+    () => true,
+    () => false,
+  );
 }
 
 export function useIsFavorite(id: string): boolean {

@@ -4,7 +4,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import {
   useEffect,
   useRef,
-  useState,
+  type ChangeEvent,
   type FormEvent,
 } from "react";
 
@@ -32,6 +32,15 @@ function parseType(value: string): MovieType | undefined {
     : undefined;
 }
 
+function readForm(form: HTMLFormElement) {
+  const data = new FormData(form);
+  return {
+    q: String(data.get("q") ?? ""),
+    year: String(data.get("year") ?? ""),
+    type: String(data.get("type") ?? "") as "" | MovieType,
+  };
+}
+
 export function SearchView() {
   const router = useRouter();
   const searchParams = useSearchParams();
@@ -39,16 +48,6 @@ export function SearchView() {
   const q = searchParams.get("q") ?? "";
   const year = searchParams.get("year") ?? "";
   const type = parseType(searchParams.get("type") ?? "");
-
-  const [queryInput, setQueryInput] = useState(q);
-  const [yearInput, setYearInput] = useState(year);
-  const [typeInput, setTypeInput] = useState<"" | MovieType>(type ?? "");
-
-  useEffect(() => {
-    setQueryInput(q);
-    setYearInput(year);
-    setTypeInput(type ?? "");
-  }, [q, year, type]);
 
   function applyParams(next: { q: string; year: string; type: "" | MovieType }) {
     const params = new URLSearchParams();
@@ -60,7 +59,13 @@ export function SearchView() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    applyParams({ q: queryInput, year: yearInput, type: typeInput });
+    applyParams(readForm(event.currentTarget));
+  }
+
+  function handleTypeChange(event: ChangeEvent<HTMLSelectElement>) {
+    if (event.currentTarget.form) {
+      applyParams(readForm(event.currentTarget.form));
+    }
   }
 
   const search = useMovieSearch({
@@ -95,6 +100,7 @@ export function SearchView() {
   return (
     <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">
       <form
+        key={`${q}|${year}|${type ?? ""}`}
         role="search"
         onSubmit={handleSubmit}
         className="sticky top-16 z-30 -mx-4 mb-6 flex flex-col gap-3 border-b border-border/60 bg-background/80 px-4 py-4 backdrop-blur sm:mx-0 sm:flex-row sm:items-center sm:rounded-xl sm:border sm:px-4"
@@ -107,8 +113,8 @@ export function SearchView() {
           <input
             id="search-input"
             type="search"
-            value={queryInput}
-            onChange={(event) => setQueryInput(event.target.value)}
+            name="q"
+            defaultValue={q}
             placeholder="Search movies, series…"
             autoComplete="off"
             className="w-full rounded-full border border-border bg-surface py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted focus-visible:border-accent"
@@ -123,11 +129,11 @@ export function SearchView() {
             <input
               id="year-input"
               type="number"
+              name="year"
               inputMode="numeric"
               min={1888}
               max={CURRENT_YEAR + 1}
-              value={yearInput}
-              onChange={(event) => setYearInput(event.target.value)}
+              defaultValue={year}
               placeholder="Year"
               className="w-24 rounded-full border border-border bg-surface px-4 py-2.5 text-sm text-foreground placeholder:text-muted focus-visible:border-accent"
             />
@@ -139,12 +145,9 @@ export function SearchView() {
             </label>
             <select
               id="type-select"
-              value={typeInput}
-              onChange={(event) => {
-                const value = event.target.value as "" | MovieType;
-                setTypeInput(value);
-                applyParams({ q: queryInput, year: yearInput, type: value });
-              }}
+              name="type"
+              defaultValue={type ?? ""}
+              onChange={handleTypeChange}
               className="rounded-full border border-border bg-surface px-4 py-2.5 text-sm text-foreground focus-visible:border-accent"
             >
               {TYPE_OPTIONS.map((option) => (
