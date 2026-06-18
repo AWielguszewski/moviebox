@@ -1,4 +1,7 @@
+"use client";
+
 import Image from "next/image";
+import { useState } from "react";
 
 import { FilmIcon } from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
@@ -20,6 +23,9 @@ export function PosterImage({
   decorative = false,
   className,
 }: PosterImageProps) {
+  const [failed, setFailed] = useState(false);
+  const showImage = poster !== null && !failed;
+
   return (
     <div
       className={cn(
@@ -27,7 +33,7 @@ export function PosterImage({
         className,
       )}
     >
-      {poster ? (
+      {showImage ? (
         <Image
           src={poster}
           alt={decorative ? "" : title}
@@ -36,6 +42,7 @@ export function PosterImage({
           sizes={sizes}
           className="object-cover"
           priority={priority}
+          onError={() => setFailed(true)}
         />
       ) : (
         <div
