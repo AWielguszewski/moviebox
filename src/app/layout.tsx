@@ -59,6 +59,10 @@ export default function RootLayout({
       data-scroll-behavior="smooth"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
+      <head>
+        <link rel="preconnect" href="https://m.media-amazon.com" />
+        <link rel="preconnect" href="https://ia.media-imdb.com" />
+      </head>
       <body className="min-h-full flex flex-col">
         <a
           href="#main-content"

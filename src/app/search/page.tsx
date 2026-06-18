@@ -1,37 +1,46 @@
+import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query";
 import type { Metadata } from "next";
 import { Suspense } from "react";
 
 import { MovieGridSkeleton } from "@/components/movie/MovieGridSkeleton";
+import { parseSearchPageParams } from "@/features/search/params";
+import { prefetchSearch } from "@/features/search/prefetchSearch";
 import { SearchView } from "@/features/search/SearchView";
+
+export const metadata: Metadata = {
+  title: "Search",
+  description: "Search movies and series.",
+};
 
 type SearchParams = Promise<{ q?: string; year?: string; type?: string }>;
 
-export async function generateMetadata({
+export default async function SearchPage({
   searchParams,
 }: {
   searchParams: SearchParams;
-}): Promise<Metadata> {
-  const { q } = await searchParams;
-  const query = q?.trim();
+}) {
+  const params = parseSearchPageParams(await searchParams);
+  const queryClient = new QueryClient();
 
-  return {
-    title: query ? `Search: ${query}` : "Search",
-    description: query
-      ? `Search results for “${query}”.`
-      : "Search movies and series.",
-  };
-}
+  if (params.q.length > 0) {
+    try {
+      await prefetchSearch(queryClient, params);
+    } catch {
+      // Allow the client to fetch results instead.
+    }
+  }
 
-export default function SearchPage() {
   return (
-    <Suspense
-      fallback={
-        <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">
-          <MovieGridSkeleton />
-        </main>
-      }
-    >
-      <SearchView />
-    </Suspense>
+    <HydrationBoundary state={dehydrate(queryClient)}>
+      <Suspense
+        fallback={
+          <main className="mx-auto w-full max-w-6xl flex-1 px-4 py-6 sm:px-6">
+            <MovieGridSkeleton />
+          </main>
+        }
+      >
+        <SearchView />
+      </Suspense>
+    </HydrationBoundary>
   );
 }

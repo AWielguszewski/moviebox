@@ -4,6 +4,9 @@ import { searchMovies } from "@/lib/omdb/client";
 import type { OmdbErrorCode } from "@/lib/omdb/errors";
 import { movieTypeSchema } from "@/lib/omdb/schemas";
 
+const SEARCH_CACHE_CONTROL =
+  "public, s-maxage=3600, stale-while-revalidate=86400";
+
 const STATUS_BY_CODE: Record<OmdbErrorCode, number> = {
   NOT_FOUND: 404,
   TOO_MANY_RESULTS: 400,
@@ -36,5 +39,7 @@ export async function GET(request: NextRequest) {
     );
   }
 
-  return NextResponse.json(result.data);
+  return NextResponse.json(result.data, {
+    headers: { "Cache-Control": SEARCH_CACHE_CONTROL },
+  });
 }

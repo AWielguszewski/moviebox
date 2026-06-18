@@ -3,6 +3,7 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import type { MovieType } from "@/lib/omdb/schemas";
 
 import { fetchSearch } from "./api";
+import { searchQueryKey } from "./searchQueryKey";
 
 export interface MovieSearchArgs {
   q: string;
@@ -14,7 +15,7 @@ export function useMovieSearch({ q, year, type }: MovieSearchArgs) {
   const query = q.trim();
 
   return useInfiniteQuery({
-    queryKey: ["search", query, year ?? "", type ?? ""],
+    queryKey: searchQueryKey({ q: query, year, type }),
     enabled: query.length > 0,
     initialPageParam: 1,
     queryFn: ({ pageParam }) =>

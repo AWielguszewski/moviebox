@@ -6,7 +6,7 @@ export function MovieGrid({ movies }: { movies: MovieSummary[] }) {
     <ul className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
       {movies.map((movie, index) => (
         <li key={movie.id}>
-          <MovieCard movie={movie} priority={index < 5} />
+          <MovieCard movie={movie} priority={index === 0} />
         </li>
       ))}
     </ul>

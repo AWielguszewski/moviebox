@@ -1,8 +1,16 @@
+import dynamic from "next/dynamic";
 import Link from "next/link";
 
-import { FavoriteButton } from "@/components/movie/FavoriteButton";
 import { PosterImage } from "@/components/movie/PosterImage";
 import type { MovieSummary } from "@/lib/omdb/types";
+
+const FavoriteButton = dynamic(
+  () =>
+    import("@/components/movie/FavoriteButton").then((mod) => ({
+      default: mod.FavoriteButton,
+    })),
+  { ssr: false },
+);
 
 const TYPE_LABELS: Record<string, string> = {
   movie: "Movie",
@@ -29,7 +37,7 @@ export function MovieCard({
             poster={movie.poster}
             title={movie.title}
             priority={priority}
-            quality={50}
+            quality={priority ? 50 : 35}
             sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 200px"
             className="transition-transform duration-300 group-hover:scale-105"
           />

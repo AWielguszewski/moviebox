@@ -12,9 +12,10 @@ import { MovieGrid } from "@/components/movie/MovieGrid";
 import { MovieGridSkeleton } from "@/components/movie/MovieGridSkeleton";
 import { FilmIcon, SearchIcon } from "@/components/ui/icons";
 import { StatusMessage } from "@/components/ui/StatusMessage";
-import { MOVIE_TYPES, type MovieType } from "@/lib/omdb/schemas";
+import type { MovieType } from "@/lib/omdb/schemas";
 import type { MovieSummary } from "@/lib/omdb/types";
 
+import { parseMovieType } from "./params";
 import { useMovieSearch } from "./useMovieSearch";
 
 const TYPE_OPTIONS: { value: "" | MovieType; label: string }[] = [
@@ -25,12 +26,6 @@ const TYPE_OPTIONS: { value: "" | MovieType; label: string }[] = [
 ];
 
 const CURRENT_YEAR = new Date().getFullYear();
-
-function parseType(value: string): MovieType | undefined {
-  return (MOVIE_TYPES as readonly string[]).includes(value)
-    ? (value as MovieType)
-    : undefined;
-}
 
 function readForm(form: HTMLFormElement) {
   const data = new FormData(form);
@@ -47,7 +42,7 @@ export function SearchView() {
 
   const q = searchParams.get("q") ?? "";
   const year = searchParams.get("year") ?? "";
-  const type = parseType(searchParams.get("type") ?? "");
+  const type = parseMovieType(searchParams.get("type") ?? undefined);
 
   function applyParams(next: { q: string; year: string; type: "" | MovieType }) {
     const params = new URLSearchParams();
@@ -73,6 +68,11 @@ export function SearchView() {
     year: year || undefined,
     type,
   });
+
+  useEffect(() => {
+    const query = q.trim();
+    document.title = query ? `Search: ${query}` : "Search";
+  }, [q]);
 
   const movies = search.data?.pages.flatMap((page) => page.items) ?? [];
   const totalResults = search.data?.pages[0]?.totalResults ?? 0;

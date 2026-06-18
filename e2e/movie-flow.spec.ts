@@ -8,6 +8,14 @@ test("home page renders the hero and search", async ({ page }) => {
   await expect(page.getByRole("searchbox")).toBeVisible();
 });
 
+test("search results are included in the initial HTML", async ({ request }) => {
+  const response = await request.get("/search?q=Matrix");
+  expect(response.ok()).toBeTruthy();
+
+  const html = await response.text();
+  expect(html).toMatch(/The Matrix/i);
+});
+
 test("shows an empty state for queries with no matches", async ({ page }) => {
   await page.goto("/search?q=zzzznomatch");
   await expect(
