@@ -57,7 +57,7 @@ export function SearchBar({
         placeholder="Search movies, series…"
         autoComplete="off"
         className={cn(
-          "w-full rounded-full border border-border bg-surface/80 text-foreground shadow-lg backdrop-blur placeholder:text-muted focus-visible:border-accent",
+          "w-full rounded-full border border-border bg-surface/80 text-foreground shadow-lg backdrop-blur placeholder:text-muted",
           isHero
             ? "py-4 pl-13 pr-32 text-base sm:text-lg"
             : "py-2.5 pl-10 pr-24 text-sm",

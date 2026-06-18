@@ -14,9 +14,6 @@ export default async function HomePage() {
       <PosterMosaic items={mosaicItems} />
 
       <section className="relative z-10 flex w-full max-w-2xl flex-col items-center gap-6 text-center">
-        <p className="text-sm font-medium uppercase tracking-[0.3em] text-muted">
-          Moviebox
-        </p>
         <h1 className="text-balance text-4xl font-bold sm:text-6xl">
           Find your next watch
         </h1>

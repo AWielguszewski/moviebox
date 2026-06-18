@@ -11,7 +11,6 @@ export function Footer() {
         >
           OMDb API
         </a>
-        . Built with Next.js.
       </p>
     </footer>
   );

@@ -117,7 +117,7 @@ export function SearchView() {
             defaultValue={q}
             placeholder="Search movies, series…"
             autoComplete="off"
-            className="w-full rounded-full border border-border bg-surface py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted focus-visible:border-accent"
+            className="w-full rounded-full border border-border bg-surface py-2.5 pl-10 pr-4 text-sm text-foreground placeholder:text-muted"
           />
         </div>
 
@@ -135,7 +135,7 @@ export function SearchView() {
               max={CURRENT_YEAR + 1}
               defaultValue={year}
               placeholder="Year"
-              className="w-24 rounded-full border border-border bg-surface px-4 py-2.5 text-sm text-foreground placeholder:text-muted focus-visible:border-accent"
+              className="w-24 rounded-full border border-border bg-surface px-4 py-2.5 text-sm text-foreground placeholder:text-muted"
             />
           </div>
 
@@ -148,7 +148,7 @@ export function SearchView() {
               name="type"
               defaultValue={type ?? ""}
               onChange={handleTypeChange}
-              className="rounded-full border border-border bg-surface px-4 py-2.5 text-sm text-foreground focus-visible:border-accent"
+              className="rounded-full border border-border bg-surface px-4 py-2.5 text-sm text-foreground"
             >
               {TYPE_OPTIONS.map((option) => (
                 <option key={option.value} value={option.value}>
