@@ -51,6 +51,7 @@ export function MovieDetails({
           poster={poster}
           title={detail.Title}
           priority
+          quality={50}
           sizes="(max-width: 640px) 40vw, 200px"
           className="rounded-card shadow-xl"
         />

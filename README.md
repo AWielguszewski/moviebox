@@ -1,5 +1,7 @@
 # Moviebox
 
+### Preview: https://moviebox-livid.vercel.app/
+
 ## Getting started
 
 Requirements: Node 18+ and [pnpm](https://pnpm.io/).

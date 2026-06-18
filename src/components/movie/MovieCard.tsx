@@ -29,6 +29,7 @@ export function MovieCard({
             poster={movie.poster}
             title={movie.title}
             priority={priority}
+            quality={50}
             sizes="(max-width: 640px) 45vw, (max-width: 1024px) 30vw, 200px"
             className="transition-transform duration-300 group-hover:scale-105"
           />
