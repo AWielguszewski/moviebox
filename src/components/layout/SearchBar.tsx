@@ -59,18 +59,28 @@ export function SearchBar({
         className={cn(
           "w-full rounded-full border border-border bg-surface/80 text-foreground shadow-lg backdrop-blur placeholder:text-muted",
           isHero
-            ? "py-4 pl-13 pr-32 text-base sm:text-lg"
+            ? "py-4 pl-13 pr-16 text-base sm:pr-32 sm:text-lg"
             : "py-2.5 pl-10 pr-24 text-sm",
         )}
       />
       <button
         type="submit"
+        aria-label="Search"
         className={cn(
-          "absolute top-1/2 -translate-y-1/2 rounded-full bg-accent font-semibold text-white transition-colors hover:bg-accent-hover",
-          isHero ? "right-2 px-6 py-2.5 text-sm" : "right-1.5 px-4 py-1.5 text-xs",
+          "absolute top-1/2 -translate-y-1/2 inline-flex items-center justify-center rounded-full bg-accent font-semibold text-white transition-colors hover:bg-accent-hover",
+          isHero
+            ? "right-2 px-3 py-2.5 text-sm sm:px-6"
+            : "right-1.5 px-4 py-1.5 text-xs",
         )}
       >
-        Search
+        {isHero ? (
+          <>
+            <SearchIcon className="h-5 w-5 sm:hidden" />
+            <span className="hidden sm:inline">Search</span>
+          </>
+        ) : (
+          "Search"
+        )}
       </button>
     </form>
   );
